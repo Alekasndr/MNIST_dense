@@ -5,6 +5,7 @@ from utils import *
 model = NeuralNetwork().to(device)
 model.load_state_dict(torch.load("model.pth"))
 
+'''Fashion MNIST'''
 classes = [
     "T-shirt/top",
     "Trouser",
@@ -16,6 +17,20 @@ classes = [
     "Sneaker",
     "Bag",
     "Ankle boot",
+]
+
+'''Classic MNIST'''
+classes = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
 ]
 
 model.eval()

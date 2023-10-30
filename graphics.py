@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
-
 plt.figure(figsize=(50, 50))
+
 
 def loss_graphic_creation(epochs, loss_value, val_loss_value):
     epochs = range(1, epochs + 1)

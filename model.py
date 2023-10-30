@@ -1,16 +1,19 @@
 from torch import nn
 
+
 # Define model
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(28 * 28, 512),
+            nn.Linear(28 * 28, 256),
             nn.ReLU(),
-            nn.Linear(512, 512),
+            nn.Dropout(p=0.3),
+            nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(512, 10)
+            nn.Dropout(p=0.3),
+            nn.Linear(128, 10),
         )
 
     def forward(self, x):
