@@ -5,12 +5,12 @@ import graphics
 from model import NeuralNetwork
 from data_loader import *
 from utils import *
-from graphics import *
 
 batch_size = 128
 
 # Create data loaders.
-train_dataloader = DataLoader(training_data, batch_size=batch_size)
+train_dataloader = DataLoader(train_subset, batch_size=batch_size)
+valid_dataloader = DataLoader(valid_subset, batch_size=batch_size)
 test_dataloader = DataLoader(test_data, batch_size=batch_size)
 
 for X, y in test_dataloader:
@@ -25,7 +25,7 @@ loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
 
 
-def loss_and_accuracy_check(dataloader, model, loss_fn, loss, accuracy):
+def loss_and_accuracy_check(dataloader, model, loss_fn, loss=[], accuracy=[]):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     model.eval()
@@ -70,12 +70,12 @@ def train(dataloader, model, loss_fn, optimizer, loss_values, accuracy_value):
 
 
 def test(dataloader, model, loss_fn, val_loss_values, val_accuracy_value):
-    print(f"Test:")
+    print(f"Valid:")
     loss_and_accuracy_check(dataloader, model, loss_fn, val_loss_values, val_accuracy_value)
 
 
 if __name__ == '__main__':
-    epochs = 100
+    epochs = 50
     loss_values = []
     val_loss_values = []
     accuracy_value = []
@@ -83,11 +83,10 @@ if __name__ == '__main__':
     for t in range(epochs):
         print(f"Epoch {t + 1}\n-------------------------------")
         train(train_dataloader, model, loss_fn, optimizer, loss_values, accuracy_value)
-        test(test_dataloader, model, loss_fn, val_loss_values, val_accuracy_value)
+        test(valid_dataloader, model, loss_fn, val_loss_values, val_accuracy_value)
     print("Done!")
 
-    graphics.loss_graphic_creation(epochs, loss_values, val_loss_values)
-    graphics.accuracy_graphic_creation(epochs, accuracy_value, val_accuracy_value)
+    graphics.draw_graphics(epochs, loss_values, val_loss_values, accuracy_value, val_accuracy_value)
 
     torch.save(model.state_dict(), "model.pth")
     print("Saved PyTorch Model State to model.pth")

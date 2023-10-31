@@ -1,42 +1,7 @@
-from model import NeuralNetwork
-from data_loader import *
-from utils import *
+from train import *
 
-model = NeuralNetwork().to(device)
-model.load_state_dict(torch.load("model.pth"))
-
-'''Fashion MNIST'''
-classes = [
-    "T-shirt/top",
-    "Trouser",
-    "Pullover",
-    "Dress",
-    "Coat",
-    "Sandal",
-    "Shirt",
-    "Sneaker",
-    "Bag",
-    "Ankle boot",
-]
-
-'''Classic MNIST'''
-classes = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-]
-
-model.eval()
-x, y = test_data[0][0], test_data[0][1]
-with torch.no_grad():
-    x = x.to(device)
-    pred = model(x)
-    predicted, actual = classes[pred[0].argmax(0)], classes[y]
-    print(f'Predicted: "{predicted}", Actual: "{actual}"')
+if __name__ == '__main__':
+    loaded_model = NeuralNetwork().to(device)
+    loaded_model.load_state_dict(torch.load("model.pth"))
+    loaded_model.eval()
+    loss_and_accuracy_check(test_dataloader, loaded_model, loss_fn)
